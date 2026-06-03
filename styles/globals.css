@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy: #0b1628;
+  --teal: #024854;
+  --teal-light: #034854;
+  --gold: #B19764;
+  --gold-warm: #C9A057;
+  --cyan: #32E5DF;
+  --bg: #E4F1F4;
+  --white: #ffffff;
+  --text: #0b1628;
+  --text-muted: #4a6070;
+  --border: rgba(2,72,84,0.15);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+html, body { height: 100%; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Quicksand', sans-serif;
+}
+
+button {
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+}
+
+input, select, textarea {
+  font-family: 'Inter', sans-serif;
+}
+
+* { -webkit-font-smoothing: antialiased; }
