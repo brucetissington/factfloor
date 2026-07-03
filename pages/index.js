@@ -109,7 +109,7 @@ export default function Home() {
 
           {/* Tabs */}
           <div style={styles.tabs}>
-            {[['game', 'This Round'], ['board', 'Leaderboard'], ['admin', 'Admin']].map(([id, label]) => (
+            {[['game', 'This Round'], ...(data?.round?.closed ? [['board', 'Leaderboard']] : []), ['admin', 'Admin']].map(([id, label]) => (
               <button key={id} onClick={() => setTab(id)}
                 style={{ ...styles.tab, ...(tab === id ? styles.tabActive : {}) }}>
                 {label}
@@ -129,6 +129,7 @@ export default function Home() {
                     <p style={styles.factText}>"{data.round.fact}"</p>
                   </div>
 
+                  {!data.round.closed && (
                   <div style={styles.fieldGroup}>
                     <label style={styles.label}>Who is this?</label>
                     <select style={styles.select} value={guesser}
@@ -137,6 +138,7 @@ export default function Home() {
                       {data.staff.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
                     </select>
                   </div>
+                  )}
 
                   {guesser && myGuess && (
                     <div style={{ ...styles.resultBanner, ...(myGuess.correct ? styles.resultCorrect : styles.resultWrong) }}>
@@ -147,13 +149,13 @@ export default function Home() {
                     </div>
                   )}
 
-                  {guesser && !myGuess && !submitted && (
+                  {guesser && !myGuess && !submitted && !data.round.closed && (
                     <>
                       <label style={{ ...styles.label, marginBottom: '12px', display: 'block' }}>
                         Who does this fact belong to?
                       </label>
                       <div style={styles.namesGrid}>
-                        {data.staff.map(s => (
+                        {data.staff.filter(s => s.name !== guesser).map(s => (
                           <button key={s.id} onClick={() => setSelected(s.name)}
                             style={{
                               ...styles.nameBtn,
@@ -173,10 +175,10 @@ export default function Home() {
                     </>
                   )}
 
-                  {submitted && result && (
+                  {submitted && result && !data.round.closed && (
                     <>
                       <div style={styles.namesGrid}>
-                        {data.staff.map(s => (
+                        {data.staff.filter(s => s.name !== guesser).map(s => (
                           <button key={s.id} disabled
                             style={{
                               ...styles.nameBtn,
@@ -199,6 +201,26 @@ export default function Home() {
                           : `The fact belongs to ${result.answer}. Better luck next round.`}
                       </div>
                     </>
+                  )}
+
+                  {data.round.closed && (
+                    <div style={styles.resultsSection}>
+                      <h3 style={styles.resultsTitle}>Round closed — the answer was <span style={styles.resultsAnswer}>{data.round.answer}</span></h3>
+                      <div style={styles.resultsList}>
+                        {data.guesses.map(g => (
+                          <div key={g.id} style={styles.resultsRow}>
+                            <span style={g.correct ? styles.resultsCheck : styles.resultsCross}>
+                              {g.correct ? '✓' : '✗'}
+                            </span>
+                            <span style={styles.resultsGuesser}>{g.guesser}</span>
+                            <span style={styles.resultsGuessed}>guessed {g.answer}</span>
+                          </div>
+                        ))}
+                        {data.guesses.length === 0 && (
+                          <div style={styles.emptyState}>No guesses were submitted this round.</div>
+                        )}
+                      </div>
+                    </div>
                   )}
                 </>
               )}
@@ -299,11 +321,14 @@ export default function Home() {
                         onClick={() => { if (confirm('Reset the leaderboard? This cannot be undone.')) adminAction('reset_leaderboard', {}) }}>
                         Reset leaderboard
                       </button>
-                      {data?.round && (
-                        <button style={styles.ghostBtn}
-                          onClick={() => { if (confirm('Clear all guesses for this round?')) adminAction('reset_round', { round_id: data.round.id }) }}>
-                          Clear round guesses
+                      {data?.round && !data.round.closed && (
+                        <button style={styles.closeBtn}
+                          onClick={() => { if (confirm('Close this round and reveal results? This cannot be undone.')) adminAction('close_round', { round_id: data.round.id }) }}>
+                          Close round &amp; reveal
                         </button>
+                      )}
+                      {data?.round?.closed && (
+                        <span style={{ fontSize: '13px', color: '#4a6070', alignSelf: 'center' }}>This round is closed.</span>
                       )}
                     </div>
                   </div>
@@ -387,4 +412,15 @@ const styles = {
   addBtn: { background: '#E4F1F4', border: '1px solid rgba(2,72,84,0.2)', borderRadius: '8px', padding: '10px 16px', fontSize: '14px', color: '#024854', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 500 },
   dangerBtn: { background: 'none', border: '1px solid #E24B4A', color: '#A32D2D', borderRadius: '8px', padding: '8px 16px', fontSize: '13px', cursor: 'pointer' },
   ghostBtn: { background: 'none', border: '1px solid rgba(2,72,84,0.2)', color: '#4a6070', borderRadius: '8px', padding: '8px 16px', fontSize: '13px', cursor: 'pointer' },
+  closeBtn: { background: '#024854', border: 'none', color: '#ffffff', borderRadius: '8px', padding: '8px 16px', fontSize: '13px', cursor: 'pointer', fontWeight: 600 },
+
+  resultsSection: { marginTop: '1.5rem' },
+  resultsTitle: { fontFamily: 'Quicksand, sans-serif', fontSize: '15px', fontWeight: 700, color: '#0b1628', marginBottom: '1rem' },
+  resultsAnswer: { color: '#024854' },
+  resultsList: { display: 'flex', flexDirection: 'column', gap: '6px' },
+  resultsRow: { display: 'flex', alignItems: 'center', gap: '10px', background: '#ffffff', borderRadius: '8px', padding: '10px 14px', border: '1px solid rgba(2,72,84,0.1)' },
+  resultsCheck: { color: '#1D9E75', fontWeight: 700, fontSize: '15px', flexShrink: 0 },
+  resultsCross: { color: '#E24B4A', fontWeight: 700, fontSize: '15px', flexShrink: 0 },
+  resultsGuesser: { fontSize: '14px', fontWeight: 600, color: '#0b1628', flex: 1 },
+  resultsGuessed: { fontSize: '13px', color: '#4a6070' },
 }

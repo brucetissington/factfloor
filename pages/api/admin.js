@@ -36,6 +36,13 @@ export default async function handler(req, res) {
     return res.json({ ok: true })
   }
 
+  if (action === 'close_round') {
+    const { round_id } = payload
+    const { error } = await supabase.from('rounds').update({ closed: true }).eq('id', round_id)
+    if (error) return res.status(400).json({ error: error.message })
+    return res.json({ ok: true })
+  }
+
   if (action === 'reset_leaderboard') {
     await supabase.from('leaderboard').delete().neq('id', '00000000-0000-0000-0000-000000000000')
     return res.json({ ok: true })
