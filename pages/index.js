@@ -315,6 +315,28 @@ export default function Home() {
                   </div>
 
                   <div style={styles.adminCard}>
+                    <h3 style={styles.adminCardTitle}>Votes so far</h3>
+                    <p style={{ fontSize: '13px', color: '#4a6070', marginBottom: '12px' }}>
+                      {data?.guesses?.length || 0} of {data?.staff?.length || 0} have voted
+                    </p>
+                    {!data?.guesses?.length ? (
+                      <p style={{ fontSize: '14px', color: '#4a6070' }}>No votes yet</p>
+                    ) : (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        {data.guesses.map(g => (
+                          <div key={g.id} style={styles.voteRow}>
+                            <span style={g.correct ? styles.resultsCheck : styles.resultsCross}>
+                              {g.correct ? '✓' : '✗'}
+                            </span>
+                            <span style={styles.resultsGuesser}>{g.guesser}</span>
+                            <span style={styles.resultsGuessed}>guessed {g.answer}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div style={styles.adminCard}>
                     <h3 style={{ ...styles.adminCardTitle, color: '#8b2020' }}>Danger zone</h3>
                     <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                       <button style={styles.dangerBtn}
@@ -419,6 +441,7 @@ const styles = {
   resultsAnswer: { color: '#024854' },
   resultsList: { display: 'flex', flexDirection: 'column', gap: '6px' },
   resultsRow: { display: 'flex', alignItems: 'center', gap: '10px', background: '#ffffff', borderRadius: '8px', padding: '10px 14px', border: '1px solid rgba(2,72,84,0.1)' },
+  voteRow: { display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 10px', borderRadius: '6px', background: '#f7fbfc' },
   resultsCheck: { color: '#1D9E75', fontWeight: 700, fontSize: '15px', flexShrink: 0 },
   resultsCross: { color: '#E24B4A', fontWeight: 700, fontSize: '15px', flexShrink: 0 },
   resultsGuesser: { fontSize: '14px', fontWeight: 600, color: '#0b1628', flex: 1 },
