@@ -325,9 +325,11 @@ export default function Home() {
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                         {data.guesses.map(g => (
                           <div key={g.id} style={styles.voteRow}>
-                            <span style={g.correct ? styles.resultsCheck : styles.resultsCross}>
-                              {g.correct ? '✓' : '✗'}
-                            </span>
+                            {data.round?.closed && (
+                              <span style={g.correct ? styles.resultsCheck : styles.resultsCross}>
+                                {g.correct ? '✓' : '✗'}
+                              </span>
+                            )}
                             <span style={styles.resultsGuesser}>{g.guesser}</span>
                             <span style={styles.resultsGuessed}>guessed {g.answer}</span>
                           </div>
