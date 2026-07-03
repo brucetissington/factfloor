@@ -109,7 +109,7 @@ export default function Home() {
 
           {/* Tabs */}
           <div style={styles.tabs}>
-            {[['game', 'This Round'], ...(data?.round?.closed ? [['board', 'Leaderboard']] : []), ['admin', 'Admin']].map(([id, label]) => (
+            {[['game', 'This Round'], ['board', 'Leaderboard'], ['admin', 'Admin']].map(([id, label]) => (
               <button key={id} onClick={() => setTab(id)}
                 style={{ ...styles.tab, ...(tab === id ? styles.tabActive : {}) }}>
                 {label}

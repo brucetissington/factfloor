@@ -40,6 +40,17 @@ export default async function handler(req, res) {
     const { round_id } = payload
     const { error } = await supabase.from('rounds').update({ closed: true }).eq('id', round_id)
     if (error) return res.status(400).json({ error: error.message })
+
+    const { data: correctGuesses } = await supabase.from('guesses').select('guesser').eq('round_id', round_id).eq('correct', true)
+    for (const g of correctGuesses || []) {
+      const { data: existing } = await supabase.from('leaderboard').select('*').eq('name', g.guesser).single()
+      if (existing) {
+        await supabase.from('leaderboard').update({ points: existing.points + 1 }).eq('name', g.guesser)
+      } else {
+        await supabase.from('leaderboard').insert({ name: g.guesser, points: 1 })
+      }
+    }
+
     return res.json({ ok: true })
   }
 
