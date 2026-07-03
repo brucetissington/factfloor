@@ -140,14 +140,17 @@ export default function Home() {
                   </div>
                   )}
 
-                  {guesser && myGuess && (
+                  {guesser && myGuess && !data.round.closed && (
+                    <div style={styles.resultBanner}>
+                      Thanks! You'll have to wait and see until the round closes whether you were on the money!
+                    </div>
+                  )}
+                  {guesser && myGuess && data.round.closed && (
                     <div style={{ ...styles.resultBanner, ...(myGuess.correct ? styles.resultCorrect : styles.resultWrong) }}>
-                      <strong>{myGuess.correct ? 'You got it!' : 'Not quite —'}</strong>{' '}
+                      <strong>{myGuess.correct ? '✓ Correct!' : '✗ Not quite —'}</strong>{' '}
                       {myGuess.correct
-                        ? data.round.closed ? `You correctly guessed ${myGuess.answer}.` : 'You got it! Check back when the round closes for the full reveal.'
-                        : data.round.closed
-                          ? `You guessed ${myGuess.answer}. The answer was ${data.round.answer}.`
-                          : `You guessed ${myGuess.answer}. Check back when the round closes to see if you got it right.`}
+                        ? `You correctly guessed ${myGuess.answer}.`
+                        : `You guessed ${myGuess.answer}. The answer was ${data.round.answer}.`}
                     </div>
                   )}
 
@@ -196,11 +199,8 @@ export default function Home() {
                           </button>
                         ))}
                       </div>
-                      <div style={{ ...styles.resultBanner, ...(result.correct ? styles.resultCorrect : styles.resultWrong) }}>
-                        <strong>{result.correct ? '✓ Correct!' : '✗ Not quite'}</strong>{' '}
-                        {result.correct
-                          ? `That fact belongs to ${result.answer}. Point on the board!`
-                          : `The fact belongs to ${result.answer}. Better luck next round.`}
+                      <div style={styles.resultBanner}>
+                        Thanks! You'll have to wait and see until the round closes whether you were on the money!
                       </div>
                     </>
                   )}
@@ -409,7 +409,7 @@ const styles = {
   submitBtn: { width: '100%', padding: '14px', background: '#024854', color: '#ffffff', border: 'none', borderRadius: '10px', fontSize: '15px', fontWeight: 600, cursor: 'pointer', fontFamily: 'Quicksand, sans-serif', marginBottom: '1rem' },
   submitBtnDisabled: { opacity: 0.4, cursor: 'not-allowed' },
 
-  resultBanner: { borderRadius: '10px', padding: '14px 18px', fontSize: '14px', lineHeight: 1.5, marginBottom: '1rem' },
+  resultBanner: { borderRadius: '10px', padding: '14px 18px', fontSize: '14px', lineHeight: 1.5, marginBottom: '1rem', background: '#f0f8fa', border: '1px solid rgba(2,72,84,0.15)', color: '#0b1628' },
   resultCorrect: { background: '#E1F5EE', border: '1px solid #5DCAA5', color: '#085041' },
   resultWrong: { background: '#FCEBEB', border: '1px solid #F09595', color: '#791F1F' },
 
