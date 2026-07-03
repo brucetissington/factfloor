@@ -38,14 +38,14 @@ export default function Home() {
 
   async function submitGuess() {
     if (!selected || !guesser || !data?.round) return
-    const correct = selected === data.round.answer
-    setResult({ correct, answer: data.round.answer })
     setSubmitted(true)
-    await fetch('/api/guess', {
+    const res = await fetch('/api/guess', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ round_id: data.round.id, guesser, answer: selected, correct })
+      body: JSON.stringify({ round_id: data.round.id, guesser, answer: selected })
     })
+    const json = await res.json()
+    setResult({ correct: json.correct, answer: json.roundAnswer })
     fetchData()
   }
 
