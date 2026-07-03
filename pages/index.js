@@ -144,7 +144,7 @@ export default function Home() {
                     <div style={{ ...styles.resultBanner, ...(myGuess.correct ? styles.resultCorrect : styles.resultWrong) }}>
                       <strong>{myGuess.correct ? 'You got it!' : 'Not quite —'}</strong>{' '}
                       {myGuess.correct
-                        ? `You correctly guessed ${myGuess.answer}.`
+                        ? data.round.closed ? `You correctly guessed ${myGuess.answer}.` : 'You got it! Check back when the round closes for the full reveal.'
                         : data.round.closed
                           ? `You guessed ${myGuess.answer}. The answer was ${data.round.answer}.`
                           : `You guessed ${myGuess.answer}. Check back when the round closes to see if you got it right.`}
