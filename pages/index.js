@@ -145,7 +145,9 @@ export default function Home() {
                       <strong>{myGuess.correct ? 'You got it!' : 'Not quite —'}</strong>{' '}
                       {myGuess.correct
                         ? `You correctly guessed ${myGuess.answer}.`
-                        : `You guessed ${myGuess.answer}. The answer was ${data.round.answer}.`}
+                        : data.round.closed
+                          ? `You guessed ${myGuess.answer}. The answer was ${data.round.answer}.`
+                          : `You guessed ${myGuess.answer}. Check back when the round closes to see if you got it right.`}
                     </div>
                   )}
 
