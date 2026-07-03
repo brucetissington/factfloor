@@ -130,10 +130,10 @@ export default function Home() {
                   </div>
 
                   <div style={styles.fieldGroup}>
-                    <label style={styles.label}>Who are you?</label>
+                    <label style={styles.label}>Who is this?</label>
                     <select style={styles.select} value={guesser}
                       onChange={e => { setGuesser(e.target.value); setSelected(null); setSubmitted(false); setResult(null) }}>
-                      <option value="">Select your name…</option>
+                      <option value="">Select your name to cast your guess…</option>
                       {data.staff.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
                     </select>
                   </div>
@@ -221,7 +221,7 @@ export default function Home() {
                       <div style={styles.lbAvatar}>
                         {entry.name.split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase()}
                       </div>
-                      <span style={styles.lbName}>{entry.name}</span>
+                      <span style={{ ...styles.lbName, color: i === 0 ? '#ffffff' : '#B19764' }}>{entry.name}</span>
                       <div style={styles.lbBarWrap}>
                         <div style={{ ...styles.lbBar, width: `${Math.round((entry.points / maxPoints) * 100)}%` }} />
                       </div>
